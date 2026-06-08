@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PUBG MAPS — секретные места</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗝️</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <div class="main">
+        <!-- Логотип -->
+        <div class="logo-area">
+            <div class="logo">
+                <div class="logo-icon">🏚️</div>
+                <div>
+                    <div class="logo-text">PUBG SECRET ROOM</div>
+                    <div class="logo-sub">hidden bunkers & key locations</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title">PUBG MAPS</div>
+        
+        <!-- Кнопки карт + настройки + новая вкладка -->
+        <div class="buttons">
+            <button data-map="erangel">ERANGEL</button>
+            <button data-map="vikendi">VIKENDI</button>
+            <button data-map="paramo">PARAMO</button>
+            <button data-map="deston">DESTON</button>
+            <button data-map="taego">TAEGO</button>
+            <button id="settingsBtn">⚡ PRO SETTINGS</button>
+            <button id="newsBtn">📰 NEWS & CONTACTS</button>
+        </div>
+
+        <div id="infoArea" class="content">
+            <div style="text-align:center; padding:80px; color:#aaa;">Выберите карту или новости</div>
+        </div>
+    </div>
+    <div class="footer"><span class="version">ВЕРСИЯ 67.0</span></div>
+</div>
+
+<script>
+// Данные карт (такие же, как в прошлый раз)
+const maps = {
+    erangel: {
+        name: "ERANGEL",
+        img: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e247bc369bab3ba19baa82_67e27fe71304611da9065896/scale_1200",
+        text: `<h3>🏚️ Потайные подвалы на Эрангель</h3>
+        <p>Классическая карта. Тайные подвалы спрятаны под досками с нарисованным крестом. Чтобы открыть, нужно выстрелить или бросить гранату. После этого спускаетесь по лестнице и используете ключ.</p>
+        <h4>🎁 Что можно найти в тайных подвалах?</h4>
+        <ul>
+            <li>Большое количество гранат разного типа</li>
+            <li>Аптечки, спасательный шар</li>
+            <li>Маскхалат, бронежилет 3 уровня, рюкзак 3 уровня</li>
+            <li>Редкое оружие (в т.ч. MK14)</li>
+            <li>Обвесы на оружие, дробовики, МС, ШВ</li>
+        </ul>
+        <p><strong>🗝️ Где искать ключи?</strong> Ключи выпадают случайно, чаще в крупных городах (Георгопол, Розок, военная база). Нашли ключ — отправляйтесь к любому отмеченному на карте подвалу.</p>`
+    },
+    vikendi: {
+        name: "VIKENDI",
+        img: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e247bc369bab3ba19baa82_67e263436cc2d25427079d16/scale_1200",
+        text: `<h3>❄️ Бункеры на Викенди</h3>
+        <p>Одиночные здания-бункеры легко заметить на карте. Без ключа внутри почти пусто, но с ключом вы получите отличный лут.</p>
+        <h4>🔥 Что даёт ключ-карта в бункере?</h4>
+        <ul>
+            <li>3 вида оружия</li>
+            <li>Несколько гранат</li>
+            <li>Бронежилет 3 уровня, патроны, аптечки, адреналин</li>
+            <li><strong>Тепловизор (прицел 4x)</strong> — видит врагов сквозь кусты и деревья, огромное преимущество</li>
+            <li>АВД (автоматическая винтовка)</li>
+        </ul>
+        <p><strong>🗺️ Где спавнятся ключ-карты?</strong> Крупные города и места: Обсерватория, космодром, Трика, Краник, Павилка, Ламбер Ярд, Дека Место, Трейн Стейшн. Осторожно: рядом с некоторыми бункерами есть пещеры с медведями!</p>`
+    },
+    paramo: {
+        name: "PARAMO",
+        img: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e247bc369bab3ba19baa82_67e29a06473b8a0b750a514f/scale_1200",
+        text: `<h3>🔺 Секретные комнаты на Парамо</h3>
+        <p>Карта 3x3. Секретные комнаты выглядят как чёрные пирамиды с одним входом с каждой стороны. К сожалению, автор гайда ни разу не находил ключ на этой карте, но предполагает, что внутри:</p>
+        <ul>
+            <li>Маскхалат</li>
+            <li>Редкое оружие и глушители</li>
+            <li>Хорошие прицелы</li>
+            <li>Возможно, шлем 3 уровня</li>
+        </ul>
+        <p>Если вы знаете точный лут — пишите в комментариях (или просто используйте найденный ключ с умом).</p>`
+    },
+    deston: {
+        name: "DESTON",
+        img: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e247bc369bab3ba19baa82_67e2928dddf900560bb15237/scale_1200",
+        text: `<h3>🏙️ Секретные комнаты Дестон</h3>
+        <p>Большинство секретных комнат находятся в <strong>Риптоне</strong>. Чтобы их найти, желательно использовать <strong>дрон</strong>, так как некоторые расположены высоко или в труднодоступных местах.</p>
+        <p>Каждая такая комната по луту напоминает <strong>Аирдроп</strong>. Также секретки есть в специальных чёрных грузовиках, разбросанных по карте.</p>
+        <p><strong>Совет:</strong> комнат очень много, так что если у вас есть ключ, вы почти всегда будете недалеко от какой-нибудь из них. Удачи!</p>`
+    },
+    taego: {
+        name: "TAEGO",
+        img: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_67e247bc369bab3ba19baa82_67e26f71369bab3ba1e14097/scale_1200",
+        text: `<h3>🏝️ Секретные комнаты Таего</h3>
+        <p>Одна из первых карт, где автор нашёл секретку сам. Однажды забежал в маленький сарайчик рядом с домом на острове — и там лежал ключ! Ключ открывает стену в доме.</p>
+        <h4>📦 Что можно найти в тайной комнате?</h4>
+        <ul>
+            <li>Гранаты, большая аптечка, походная аптечка</li>
+            <li>АВД, передатчик синих чипов</li>
+            <li>Бронежилет 3 уровня</li>
+            <li>Прицелы от 4x до 8x</li>
+            <li>Спасательный шар</li>
+            <li>3 вида оружия</li>
+        </ul>
+        <p><strong>🗝️ Где чаще всего выпадают ключи?</strong> В местах с большим количеством лута — <strong>Go Dok</strong> и <strong>Ho San</strong>. Здания с секретной комнатой выглядят необычно, их легко запомнить (обычно это дома с закрытой металлической стеной).</p>`
+    }
+};
+
+function showMap(mapId) {
+    const map = maps[mapId];
+    if (!map) return;
+    const html = `
+        <div>
+            <div class="map-name">🗺️ ${map.name}</div>
+            <img class="map-img" src="${map.img}" alt="${map.name}" onerror="this.src='https://placehold.co/1200x700/1a1a1a/FFD700?text=IMAGE+NOT+LOADED'">
+            <div class="keys-info">${map.text}</div>
+        </div>
+    `;
+    document.getElementById('infoArea').innerHTML = html;
+}
+
+function showSettings() {
+    document.getElementById('infoArea').innerHTML = `
+        <div style="color:white;">
+            <h2 style="color:#FFD700;">🎮 ЛУЧШИЕ НАСТРОЙКИ PUBG 2026</h2>
+            <p><strong>Мышь:</strong> DPI 400-800, отключить ускорение, чувствительность x1=35-45, x4=20-30.<br>
+            <strong>Графика:</strong> Полноэкранный, текстуры Ultra, тени Very Low, растительность Very Low.<br>
+            <strong>Звук:</strong> HRTF включить, музыка 0%, звук других 100%.<br>
+            <strong>Параметры запуска Steam:</strong> <code>-malloc=system -USEALLAVAILABLECORES -sm4</code></p>
+            <div style="background:#1a1a1a; padding:15px; border-left:5px solid #FFD700; margin-top:20px; border-radius:12px;">
+                ✅ Чек-лист: DPI, отключить ускорение, текстуры Ultra, HRTF, параметры запуска.
+            </div>
+        </div>
+    `;
+}
+
+function showNews() {
+    document.getElementById('infoArea').innerHTML = `
+        <div class="news-contacts">
+            <h2 style="color:#FFD700;">📢 НОВОСТИ И КОНТАКТЫ</h2>
+            <div class="news-card">
+                <h3>📱 Telegram-канал</h3>
+                <p>Подписывайтесь на официальный канал с новостями PUBG, секретками и обновлениями:</p>
+                <a href="https://t.me/RoomPubg26" target="_blank" class="contact-link">👉 @RoomPubg26</a>
+                <p style="margin-top: 10px;">Там публикуются свежие гайды, новости о ключах и секретные места.</p>
+            </div>
+            <div class="news-card">
+                <h3>📧 Связь с разработчиком</h3>
+                <p>Если вы нашли ошибку, хотите предложить идею или просто написать:</p>
+                <a href="mailto:ryabda1904@gmail.com" class="contact-link">ryabda1904@gmail.com</a>
+                <p style="margin-top: 10px;">Я отвечаю на все письма в течение 1-2 дней.</p>
+            </div>
+        </div>
+    `;
+}
+
+document.querySelectorAll('[data-map]').forEach(btn => {
+    btn.addEventListener('click', () => showMap(btn.getAttribute('data-map')));
+});
+document.getElementById('settingsBtn').addEventListener('click', showSettings);
+document.getElementById('newsBtn').addEventListener('click', showNews);
+</script>
+</body>
+</html>
